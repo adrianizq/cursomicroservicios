@@ -3,6 +3,8 @@ package itp.instituto.tienda.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import itp.instituto.tienda.model.Customer;
+import itp.instituto.tienda.model.Product;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -41,7 +43,10 @@ public class Invoice {
 
     private String state;
 
-
+    @Transient
+    private Customer customer;
+    @Transient
+    private Product product;
 
     public Invoice(){
         items = new ArrayList<>();
