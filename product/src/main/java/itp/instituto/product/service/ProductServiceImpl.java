@@ -12,7 +12,8 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl  implements ProductService{
+
 
     private final ProductRepository productRepository;
 
@@ -24,45 +25,37 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProduct(Long id) {
         return productRepository.findById(id).orElse(null);
-
     }
 
     @Override
     public Product createProduct(Product product) {
         product.setStatus("CREATED");
-        product.setCreatedAt(new Date());
-        //guardar el producto en la bd
+        product.setCreateAt(new Date());
+
         return productRepository.save(product);
     }
 
     @Override
     public Product updateProduct(Product product) {
         Product productDB = getProduct(product.getId());
-        if (productDB == null) {
+        if (null == productDB){
             return null;
         }
-        //si el producto exite con una id
         productDB.setName(product.getName());
-        productDB.setDescription(productDB.getDescription());
+        productDB.setDescription(product.getDescription());
         productDB.setCategory(product.getCategory());
         productDB.setPrice(product.getPrice());
         return productRepository.save(productDB);
     }
 
     @Override
-    public Product deleteProduct(Long id, Boolean eliminar) {
+    public Product deleteProduct(Long id) {
         Product productDB = getProduct(id);
-        if (productDB == null) {
+        if (null == productDB){
             return null;
         }
-        if(eliminar==false) {
-            productDB.setStatus("DELETED");
-            return productRepository.save(productDB);
-        }
-        else{
-            productRepository.delete(productDB);
-            return productDB;
-        }
+        productDB.setStatus("DELETED");
+        return productRepository.save(productDB);
     }
 
     @Override
@@ -73,10 +66,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product updateStock(Long id, Double quantity) {
         Product productDB = getProduct(id);
-        if (productDB == null) {
+        if (null == productDB){
             return null;
         }
-        Double stock = productDB.getStock() + quantity;
+        Double stock =  productDB.getStock() + quantity;
         productDB.setStock(stock);
         return productRepository.save(productDB);
     }
